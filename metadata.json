@@ -1,0 +1,8 @@
+{
+  "name": "Service Commander",
+  "description": "View and toggle all running system services and processes in plain language — from the GNOME top bar.",
+  "uuid": "service-commander@beyondspace",
+  "version": 1,
+  "shell-version": ["45", "46", "47", "48"],
+  "url": "https://github.com/BeyondSpace1"
+}

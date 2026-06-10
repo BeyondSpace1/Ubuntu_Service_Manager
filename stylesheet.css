@@ -1,0 +1,12 @@
+/* Service Commander — stylesheet.css
+   Minimal overrides; most styling is done inline via St widget .style props
+   to keep things portable across GNOME themes.
+*/
+
+.service-commander-panel-button {
+  spacing: 4px;
+}
+
+.service-commander-panel-button:hover {
+  background-color: rgba(0, 255, 136, 0.08);
+}

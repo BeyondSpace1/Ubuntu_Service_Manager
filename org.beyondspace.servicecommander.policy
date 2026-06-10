@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+  "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+
+<!--
+  org.beyondspace.servicecommander.policy
+  Allows the logged-in user to start/stop systemd services via polkit.
+  Install to: /usr/share/polkit-1/actions/
+-->
+<policyconfig>
+  <vendor>Service Commander</vendor>
+  <vendor_url>https://github.com/BeyondSpace1</vendor_url>
+
+  <action id="org.beyondspace.servicecommander.manage">
+    <description>Manage system services</description>
+    <message>Authentication is required to start or stop a system service.</message>
+    <icon_name>preferences-system</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+</policyconfig>
