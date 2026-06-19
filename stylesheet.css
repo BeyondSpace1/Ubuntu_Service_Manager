@@ -1,12 +1,157 @@
-/* Service Commander — stylesheet.css
-   Minimal overrides; most styling is done inline via St widget .style props
-   to keep things portable across GNOME themes.
-*/
+/* Service Commander v2.0.1 — Standard Typography */
 
-.service-commander-panel-button {
-  spacing: 4px;
+/* Panel Button */
+.sc-panel-button {
+    spacing: 4px;
+}
+.sc-panel-button:hover {
+    background-color: rgba(0, 255, 136, 0.08);
+}
+.sc-panel-label {
+    font-weight: bold;
+    padding: 0 4px;
 }
 
-.service-commander-panel-button:hover {
-  background-color: rgba(0, 255, 136, 0.08);
+/* Menu Container */
+.sc-menu {
+    min-width: 420px;
+    background-color: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 8px;
+}
+
+/* Header */
+.sc-header {
+    padding: 12px 16px 8px 16px;
+}
+.sc-title {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-weight: bold;
+    color: #00ff88;
+    letter-spacing: 1.2px;
+}
+.sc-status {
+    color: #666;
+    font-family: monospace;
+    margin-top: 4px;
+}
+
+/* Search Entry */
+.sc-search-entry {
+    background-color: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    color: #eee;
+    font-family: monospace;
+    padding: 8px 12px;
+    margin: 4px 16px;
+}
+.sc-search-entry:focus {
+    border-color: #00ff88;
+}
+
+/* List & Scrolling */
+.sc-scroll-view {
+    max-height: 400px;
+    min-width: 390px;
+}
+.sc-list-box {
+    padding: 4px 16px;
+}
+.sc-empty-label {
+    color: #444;
+    font-family: monospace;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Rows */
+.sc-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #161616;
+}
+.sc-row-icon {
+}
+.sc-row-name-running {
+    color: #ffffff;
+    font-weight: bold;
+}
+.sc-row-name-stopped {
+    color: #555;
+}
+.sc-row-unit {
+    color: #333;
+    font-family: monospace;
+    margin-top: 2px;
+}
+
+/* Controls */
+.sc-row-controls {
+    align-self: center;
+    padding-left: 12px;
+}
+.sc-dot-active {
+    color: #00ff88;
+    margin-right: 10px;
+    align-self: center;
+}
+.sc-dot-inactive {
+    color: #444;
+    margin-right: 10px;
+    align-self: center;
+}
+
+/* Buttons */
+.sc-btn-start, .sc-btn-stop, .sc-btn-pending {
+    font-family: monospace;
+    padding: 5px 14px;
+    border-radius: 6px;
+}
+
+.sc-btn-start {
+    background-color: #001a0a;
+    border: 1px solid #005522;
+    color: #00cc66;
+}
+.sc-btn-start:hover {
+    background-color: #003314;
+}
+
+.sc-btn-stop {
+    background-color: #1a0000;
+    border: 1px solid #4a0000;
+    color: #ff4444;
+}
+.sc-btn-stop:hover {
+    background-color: #330000;
+}
+
+.sc-btn-pending {
+    background-color: #111;
+    border: 1px solid #333;
+    color: #666;
+}
+
+/* Footer */
+.sc-footer {
+    padding: 8px 16px;
+    justify-content: space-between;
+}
+.sc-refresh-btn {
+    background-color: #111;
+    border: 1px solid #222;
+    border-radius: 6px;
+    color: #888;
+    font-family: monospace;
+    padding: 6px 16px;
+}
+.sc-refresh-btn:hover {
+    color: #ccc;
+    border-color: #444;
+}
+.sc-last-refresh {
+    color: #333;
+    font-family: monospace;
+    align-self: center;
 }

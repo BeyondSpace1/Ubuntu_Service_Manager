@@ -1,70 +1,79 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-#  Service Commander — Install Script
-#  Supports GNOME 45, 46, 47, 48
+#  Service Commander v2 — Robust Installer
+#  Optimized for GNOME 45+ & Native DBus Integration
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
+# --- Configuration ---
 UUID="service-commander@beyondspace"
-INSTALL_DIR="$HOME/.local/share/gnome-shell/extensions/$UUID"
+EXT_DIR="$HOME/.local/share/gnome-shell/extensions/$UUID"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-POLICY_SRC="$SCRIPT_DIR/org.beyondspace.servicecommander.policy"
-POLICY_DST="/usr/share/polkit-1/actions/org.beyondspace.servicecommander.policy"
 
-echo ""
-echo "╔══════════════════════════════════════════════╗"
-echo "║       Service Commander — Installer          ║"
-echo "╚══════════════════════════════════════════════╝"
+# --- UI Helpers ---
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}╔══════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║       Service Commander v2 Installer         ║${NC}"
+echo -e "${BLUE}╚══════════════════════════════════════════════╝${NC}"
 echo ""
 
-# ── 1. Check GNOME Shell ─────────────────────────────────────────────────────
+# --- 1. Environment Validation ---
+echo -n "🔍 Checking environment... "
 if ! command -v gnome-shell &>/dev/null; then
-  echo "❌  GNOME Shell not found. This extension requires GNOME."
-  exit 1
+    echo -e "${RED}FAILED${NC}"
+    echo "❌ GNOME Shell not found. This is a GNOME extension."
+    exit 1
 fi
 
-GNOME_VERSION=$(gnome-shell --version | grep -oP '\d+' | head -1)
-echo "✅  GNOME Shell $GNOME_VERSION detected"
-
-# ── 2. Install extension files ───────────────────────────────────────────────
-echo "📁  Installing to $INSTALL_DIR …"
-mkdir -p "$INSTALL_DIR"
-cp "$SCRIPT_DIR/extension.js"  "$INSTALL_DIR/"
-cp "$SCRIPT_DIR/metadata.json" "$INSTALL_DIR/"
-cp "$SCRIPT_DIR/stylesheet.css" "$INSTALL_DIR/"
-echo "✅  Extension files copied"
-
-# ── 3. Install polkit policy (needs sudo) ────────────────────────────────────
-echo ""
-echo "🔑  Installing polkit policy (requires sudo for /usr/share/polkit-1/actions/)"
-if sudo cp "$POLICY_SRC" "$POLICY_DST"; then
-  echo "✅  Polkit policy installed — service toggles will prompt for password once per session"
-else
-  echo "⚠️   Polkit install skipped. Toggling services may not work without it."
-  echo "    Run manually:  sudo cp '$POLICY_SRC' '$POLICY_DST'"
+GNOME_VER=$(gnome-shell --version | grep -oP '\d+' | head -1)
+if [ "$GNOME_VER" -lt 45 ]; then
+    echo -e "${RED}INCOMPATIBLE${NC}"
+    echo "❌ GNOME $GNOME_VER detected. Version 2.0 requires GNOME 45+ (ESM support)."
+    exit 1
 fi
+echo -e "${GREEN}GNOME $GNOME_VER detected${NC}"
 
-# ── 4. Enable extension ──────────────────────────────────────────────────────
+# --- 2. Clean Installation ---
+echo -e "📁 Preparing directory: ${BLUE}$EXT_DIR${NC}"
+rm -rf "$EXT_DIR"
+mkdir -p "$EXT_DIR"
+
+# --- 3. Deploy Assets ---
+echo "🚀 Deploying Service Commander v2 assets..."
+FILES=("extension.js" "metadata.json" "stylesheet.css" "CHANGELOG.md")
+
+for file in "${FILES[@]}"; do
+    if [ -f "$SCRIPT_DIR/$file" ]; then
+        cp "$SCRIPT_DIR/$file" "$EXT_DIR/"
+        echo -e "  ${GREEN}✓${NC} $file"
+    else
+        echo -e "  ${RED}✗${NC} $file (missing!)"
+        exit 1
+    fi
+done
+
+# --- 4. Post-Install Tasks ---
 echo ""
-echo "🔌  Enabling extension…"
+echo -e "${YELLOW}🔌 Activation${NC}"
 if gnome-extensions enable "$UUID" 2>/dev/null; then
-  echo "✅  Extension enabled"
+    echo -e "  ${GREEN}✓${NC} Extension auto-enabled"
 else
-  echo "⚠️   Could not auto-enable. Enable manually:"
-  echo "    gnome-extensions enable $UUID"
-  echo "    — or use GNOME Extensions app / extensions.gnome.org"
+    echo -e "  ${YELLOW}ℹ${NC} Please enable via 'Extensions' app or extensions.gnome.org"
 fi
 
-# ── 5. Restart shell hint ─────────────────────────────────────────────────────
 echo ""
-echo "╔══════════════════════════════════════════════╗"
-echo "║  ✅  Installation complete!                  ║"
-echo "╚══════════════════════════════════════════════╝"
+echo -e "${BLUE}╔══════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║  ✅ v2.0.1 Installation Successful!          ║${NC}"
+echo -e "${BLUE}╚══════════════════════════════════════════════╝${NC}"
 echo ""
-echo "  Next step — restart GNOME Shell to activate:"
+echo -e "To complete activation, restart GNOME Shell:"
+echo -e "  ${BLUE}• Wayland:${NC} Log out and log back in."
+echo -e "  ${BLUE}• X11:${NC}     Press Alt+F2, type 'r', and Enter."
 echo ""
-echo "  • Wayland (most Ubuntu 22.04+):  Log out and log back in"
-echo "  • X11:                           Press Alt+F2, type 'r', press Enter"
-echo ""
-echo "  Then look for '⚙ Services' in your top panel."
+echo -e "Full changelog available at: ${BLUE}$EXT_DIR/CHANGELOG.md${NC}"
 echo ""

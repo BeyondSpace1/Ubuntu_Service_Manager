@@ -1,207 +1,79 @@
 <div align="center">
 
-# ⚡ Service Commander
+# ⚡ Service Commander v2
+**The ultimate GNOME extension for effortless system service management.**
 
-**A GNOME Shell extension that translates system services into plain English — with one-click start/stop controls.**
+[![GNOME Shell](https://img.shields.io/badge/GNOME%20Shell-45%20--%2048-blue?style=for-the-badge&logo=gnome&logoColor=white)](https://extensions.gnome.org)
+[![Security](https://img.shields.io/badge/Security-DBus%20Native-green?style=for-the-badge&logo=shield-halved&logoColor=white)](https://github.com/BeyondSpace1)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-[![GNOME Shell](https://img.shields.io/badge/GNOME%20Shell-45%20•%2046%20•%2047%20•%2048%20•%2049%20•%2050-blue?style=flat-square&logo=gnome&logoColor=white)](https://extensions.gnome.org)
-[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Ubuntu%2022.04%2B-orange?style=flat-square&logo=ubuntu&logoColor=white)](https://ubuntu.com)
-[![systemd](https://img.shields.io/badge/requires-systemd-red?style=flat-square)](https://systemd.io)
+---
+
+### Why Service Commander?
+Forget terminal commands and cryptic systemd unit names. **Service Commander** translates your system into human language and gives you one-click control right from your top bar.
+
+[Features] • [Installation] • [Security] • [Changelog]
 
 </div>
 
 ---
 
-## What is this?
+## 🚀 Key Features
 
-Most Linux users have no idea what `avahi-daemon.service`, `ModemManager.service`, or `systemd-resolved.service` actually do. **Service Commander** solves that.
-
-It adds a **⚙ Services** button to your GNOME top bar. Click it and you get a clean panel showing every running (and stopped) system service in human-readable language — with a toggle to start or stop any of them instantly.
-
-No terminal. No `sudo systemctl`. Just a clear list and a button.
-
----
-
-## Features
-
-- **Plain-language labels** — 35+ common services mapped to readable names (`NetworkManager.service` → *Wi-Fi & Network*, `docker.service` → *Docker*, etc.)
-- **Live status indicators** — green dot for running, dimmed for stopped
-- **Start / Stop toggle** — authenticated via polkit; prompts for password once per session
-- **Search & filter** — type to instantly narrow down the list
-- **Smart sort** — running services float to the top; everything else alphabetical
-- **Auto-prettify** — unlabelled services get cleaned-up names automatically (e.g. `my-custom-app.service` → *My custom app*)
+- **⚡ Native Performance**: Built on DBus for zero-lag service monitoring.
+- **🛡️ Secure by Design**: Uses system-native authentication — no "hacks" or hidden root scripts.
+- **🔍 Smart Search**: Instantly find services by their unit name or human-friendly label.
+- **🎨 Beautifully Integrated**: Follows GNOME HIG (Human Interface Guidelines) with a modern dark aesthetic.
+- **🏷️ Plain English**: `NetworkManager.service` → **Wi-Fi & Network**. Over 40 services pre-mapped.
 
 ---
 
-## Requirements
+## 🛠 Installation
 
-| Requirement | Version |
-|---|---|
-| GNOME Shell | 45 – 50.x |
-| Ubuntu | 22.04+ (or any distro with GNOME + systemd) |
-| systemd | any modern version |
-| pkexec / polkit | pre-installed on all Ubuntu systems |
-
----
-
-## Installation
-
-### Option A — Install script (recommended)
-
+### The One-Liner (Recommended)
 ```bash
-git clone https://github.com/BeyondSpace1/service-commander.git
-cd service-commander
-chmod +x install.sh
-./install.sh
+curl -sSL https://raw.githubusercontent.com/BeyondSpace1/service-commander/main/install.sh | bash
 ```
 
-Then restart GNOME Shell:
-
-| Session type | How to restart |
-|---|---|
-| **Wayland** (Ubuntu 22.04+ default) | Log out → Log back in |
-| **X11** | Press `Alt + F2`, type `r`, press `Enter` |
-
-### Option B — Manual install
-
-```bash
-UUID="service-commander@beyondspace"
-
-# 1. Copy extension files
-mkdir -p ~/.local/share/gnome-shell/extensions/$UUID
-cp extension.js metadata.json stylesheet.css ~/.local/share/gnome-shell/extensions/$UUID/
-
-# 2. Install polkit policy (required for service toggling)
-sudo cp org.beyondspace.servicecommander.policy /usr/share/polkit-1/actions/
-
-# 3. Enable the extension
-gnome-extensions enable $UUID
-```
-
-Then restart GNOME Shell as above.
+### Manual Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/BeyondSpace1/service-commander.git
+   ```
+2. Run the installer:
+   ```bash
+   cd service-commander
+   chmod +x install.sh
+   ./install.sh
+   ```
 
 ---
 
-## Verifying it works
+## 🛡 Security & Architecture
 
-After restarting, confirm the extension loaded:
+**Service Commander v2** is a major architectural leap. 
 
-```bash
-gnome-extensions show service-commander@beyondspace | grep State
-# Expected: State: ACTIVE
-```
-
-Then look for **⚙ Services** in your top panel.
-
----
-
-## How service toggling works
-
-Clicking **Start** or **Stop** runs:
-
-```
-pkexec systemctl start <service>
-pkexec systemctl stop  <service>
-```
-
-`pkexec` triggers a standard polkit authentication dialog — you enter your password once and it stays authenticated for the session. No permanent root access is granted, and no passwords are stored.
-
----
-
-## Adding custom service labels
-
-Open `extension.js` and find the `SERVICE_LABELS` object near the top. Add your own entry:
-
-```js
-'myapp.service': { label: 'My Application', icon: '🚀' },
-```
-
-Save the file, disable and re-enable the extension, then log out and back in.
-
----
-
-## Uninstalling
-
-```bash
-# Disable and remove extension
-gnome-extensions disable service-commander@beyondspace
-rm -rf ~/.local/share/gnome-shell/extensions/service-commander@beyondspace
-
-# Remove polkit policy
-sudo rm -f /usr/share/polkit-1/actions/org.beyondspace.servicecommander.policy
-```
-
----
-
-## Troubleshooting
-
-**Extension shows `OUT OF DATE`**
-
-Your GNOME Shell version isn't in `metadata.json`. Check your version and update the file:
-
-```bash
-gnome-shell --version
-# Add the version string (e.g. "50.1") to shell-version in metadata.json
-```
-
-**Extension shows `ERROR` state**
-
-Check the GNOME Shell journal for the exact error:
-
-```bash
-journalctl /usr/bin/gnome-shell --since "2 minutes ago" | grep -i "service-commander"
-```
-
-**Toggling a service does nothing**
-
-Make sure the polkit policy is installed:
-
-```bash
-ls /usr/share/polkit-1/actions/org.beyondspace.servicecommander.policy
-# If missing: sudo cp org.beyondspace.servicecommander.policy /usr/share/polkit-1/actions/
-```
-
-**⚙ Services button not visible in panel**
-
-With many extensions installed (Vitals, Dash to Dock, AppIndicators), the panel can get crowded. Check the right side of the top bar carefully, or temporarily disable other extensions to locate it.
-
----
-
-## GNOME version compatibility
-
-| GNOME | Ubuntu | Status |
+| Feature | v1 (Legacy) | v2 (Current) |
 |---|---|---|
-| 45 | 23.10 | ✅ Supported |
-| 46 | 24.04 LTS | ✅ Supported |
-| 47 | 24.10 | ✅ Supported |
-| 48 | 25.04 | ✅ Supported |
-| 49 | 25.10 | ✅ Supported |
-| 50 / 50.1 | 26.04 | ✅ Supported |
+| **Communication** | Shell Subprocess (`spawn`) | **Native DBus Bus** |
+| **Authentication** | `pkexec` Wrapper | **Systemd Polkit Agent** |
+| **UI Blocking** | Synchronous (Freezes UI) | **Fully Asynchronous** |
+| **Styling** | Inline JavaScript | **External CSS** |
+
+By using the `org.freedesktop.systemd1` interface, the extension never executes shell commands. Instead, it sends structured requests that the system verifies using your local security policies.
 
 ---
 
-## Project structure
+## 📈 Roadmap & Versioning
 
-```
-service-commander@beyondspace/
-├── extension.js          # Core extension logic
-├── metadata.json         # GNOME Shell metadata & version compatibility
-├── stylesheet.css        # Panel button styles
-├── install.sh            # One-shot installer script
-└── org.beyondspace.servicecommander.policy   # Polkit authentication policy
-```
+We use [Semantic Versioning](https://semver.org/).
+- **v2.x**: Current stable release (DBus Native).
+- **v3.x**: (Upcoming) Custom service grouping and log viewing.
 
----
-
-## License
-
-MIT — see [LICENSE](LICENSE) for details.
+Check the [CHANGELOG.md](./CHANGELOG.md) for full history.
 
 ---
 
 <div align="center">
-
-Built by [BeyondSpace1](https://github.com/BeyondSpace1) · Part of the AI & Security tools portfolio
-
+Built with ❤️ by BeyondSpace1.
 </div>

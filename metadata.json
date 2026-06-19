@@ -1,8 +1,8 @@
 {
   "name": "Service Commander",
-  "description": "View and toggle all running system services and processes in plain language — from the GNOME top bar.",
+  "description": "Native DBus-powered system service manager for GNOME. Fast, secure, and beautiful.",
   "uuid": "service-commander@beyondspace",
-  "version": 1,
-  "shell-version": ["45", "46", "47", "48"],
+  "version": 3,
+  "shell-version": ["45", "46", "47", "48", "49", "50"],
   "url": "https://github.com/BeyondSpace1"
 }
